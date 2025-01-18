@@ -1,4 +1,4 @@
 name: BuildAShip
 version: '${version}'
-main: turbo.buildaship.BuildAShip
+main: main.buildaship.BuildAShip
 load: STARTUP
