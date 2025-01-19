@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'Turbo'
@@ -18,44 +19,39 @@ repositories {
 }
 
 dependencies {
-    // Paper API
     compileOnly "com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT"
-
-    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
-    // Spring dependencies
-    implementation 'org.springframework:spring-context:5.3.9'
-    implementation 'org.springframework:spring-core:6.2.0'
-    implementation 'org.springframework:spring-beans:6.2.0'
-    implementation 'org.springframework:spring-orm:5.2.9.RELEASE'
-
-    // Hibernate dependencies
+    implementation 'org.springframework:spring-context:5.3.27'
+    implementation 'org.springframework:spring-core:5.3.27'
+    implementation 'org.springframework:spring-beans:5.3.27'
+    implementation 'org.springframework:spring-orm:5.3.27'
+    implementation 'org.springframework.data:spring-data-jpa:2.7.13'
     implementation 'org.hibernate:hibernate-core:5.4.22.Final'
-
-    // MySQL Connector
     implementation 'com.mysql:mysql-connector-j:8.3.0'
-
-    // c3p0 Connection Pool
     implementation 'com.mchange:c3p0:0.9.5.4'
-
-    // JAXB API and implementation (for Hibernate compatibility with JDK 11+)
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
     implementation 'javax.activation:activation:1.1.1'
-
-    // AspectJ dependencies
     implementation 'org.aspectj:aspectjrt:1.9.19'
     implementation 'org.aspectj:aspectjweaver:1.9.19'
-
-    // Java Annotations
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
-
-    // Testing dependencies
     testImplementation 'junit:junit:3.8.1'
+    implementation 'org.reflections:reflections:0.10.2'
 }
 
+shadowJar {
+    archiveBaseName.set('buildaship')
+    archiveVersion.set(version)
+    archiveClassifier.set('all')
+    mergeServiceFiles()
+    manifest {
+        attributes(
+                'Main-Class': 'main.buildaship.BuildAShip'
+        )
+    }
+}
 
 def targetJavaVersion = 8
 java {
@@ -71,6 +67,7 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+    options.encoding = 'UTF-8'
 }
 
 processResources {

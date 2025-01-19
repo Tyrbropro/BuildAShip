@@ -1,4 +1,4 @@
 name: BuildAShip
 version: '${version}'
-main: main.buildaship.BuildAShip
+main: tyrbropro.buildaship.BuildAShip
 load: STARTUP
